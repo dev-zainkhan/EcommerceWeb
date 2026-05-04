@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Add Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Add New Product</h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+                    <form method="post" action="/Product/Add" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" name="Name" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price (Rs.)</label>
+                            <input type="number" name="Price" class="form-control"
+                                   min="1" step="0.01" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" name="Stock" class="form-control"
+                                   min="0" required />
+                        </div>
+
+                        <!-- Multiple Images -->
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Product Images 
+                                <span class="text-danger">* minimum 3 required</span>
+                            </label>
+                            <input type="file" name="imageFiles" class="form-control"
+                                   accept="image/*" multiple required
+                                   onchange="previewImages(this)" />
+                            <small class="text-muted">
+                                Hold Ctrl to select multiple images
+                            </small>
+                        </div>
+
+                        <!-- Image Previews -->
+                        <div id="imagePreviews" class="d-flex gap-2 flex-wrap mb-3"></div>
+
+                        <!-- Image Count Warning -->
+                        <div id="imageWarning" class="alert alert-warning d-none">
+                            Please select at least 3 images!
+                        </div>
+
+                        <button type="submit" id="btnSubmit" 
+                                class="btn btn-success w-100">
+                            Save Product
+                        </button>
+                        <a href="/Product/Dashboard" 
+                           class="btn btn-secondary w-100 mt-2">
+                            Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImages(input) {
+            var preview = document.getElementById('imagePreviews');
+            var warning = document.getElementById('imageWarning');
+            var btnSubmit = document.getElementById('btnSubmit');
+            preview.innerHTML = '';
+
+            if (input.files.length < 3) {
+                warning.classList.remove('d-none');
+                btnSubmit.disabled = true;
+            } else {
+                warning.classList.add('d-none');
+                btnSubmit.disabled = false;
+            }
+
+            for (var i = 0; i < input.files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style = 'width:100px; height:100px; object-fit:cover; border-radius:8px; border:2px solid #198754;';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+    </script>
+}

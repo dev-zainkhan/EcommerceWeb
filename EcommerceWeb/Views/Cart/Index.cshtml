@@ -1,0 +1,113 @@
+﻿@using CartModel = EcommerceWeb.Models.Cart.Cart
+@model List<CartModel>
+
+@{
+    ViewBag.Title = "My Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">🛒 My Cart</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Your cart is empty. <a href="/Product/Index">Continue Shopping</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                @foreach (var item in Model)
+                {
+                    <div class="card mb-3 shadow-sm">
+                        <div class="row g-0">
+                            <div class="col-md-3">
+                                @if (!string.IsNullOrEmpty(item.ImagePath))
+                                {
+                                    <img src="@item.ImagePath" class="img-fluid rounded-start"
+                                         style="height:120px; object-fit:cover; width:100%;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-secondary text-white d-flex align-items-center
+                                                justify-content-center" style="height:120px;">
+                                        <span>No Image</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title">@item.ProductName</h5>
+                                        <strong class="text-success">
+                                            Rs. @item.Subtotal.ToString("N0")
+                                        </strong>
+                                    </div>
+                                    <p class="text-muted">
+                                        Rs. @item.Price.ToString("N0") x @item.Quantity
+                                    </p>
+                                    <div class="d-flex gap-2">
+                                        <form method="post" action="/Cart/UpdateQuantity">
+                                            <input type="hidden" name="cartId" value="@item.CartId" />
+                                            <div class="input-group" style="width:130px;">
+                                                <input type="number" name="quantity"
+                                                       value="@item.Quantity" min="1"
+                                                       class="form-control form-control-sm" />
+                                                <button type="submit"
+                                                        class="btn btn-outline-secondary btn-sm">
+                                                    Update
+                                                </button>
+                                            </div>
+                                        </form>
+                                        <form method="post" action="/Cart/Remove">
+                                            <input type="hidden" name="cartId" value="@item.CartId" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                🗑️ Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>Items (@Model.Count)</td>
+                                <td class="text-end">
+                                    Rs. @Model.Sum(x => x.Subtotal).ToString("N0")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Shipping</td>
+                                <td class="text-end text-success">Free</td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td>Total</td>
+                                <td class="text-end text-success">
+                                    Rs. @Model.Sum(x => x.Subtotal).ToString("N0")
+                                </td>
+                            </tr>
+                        </table>
+                        <a href="/Order/Checkout" class="btn btn-success w-100">
+                            Proceed to Checkout →
+                        </a>
+                        <a href="/Product/Index" class="btn btn-outline-secondary w-100 mt-2">
+                            ← Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

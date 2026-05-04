@@ -1,0 +1,136 @@
+﻿@model EcommerceWeb.Models.Profile.UserProfile
+
+@{
+    ViewBag.Title = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    @* <p>DEBUG Image URL: @Model.ProfileImage</p> *@
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">👤 My Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/Profile/UpdateProfile" 
+                          enctype="multipart/form-data">
+
+                        <!-- Profile Image -->
+                       <!-- Profile Image -->
+<div class="text-center mb-4">
+    <div class="position-relative d-inline-block">
+        @if (!string.IsNullOrEmpty(Model.ProfileImage))
+        {
+            <img src="@Model.ProfileImage" id="profilePreview"
+                 class="rounded-circle"
+                 style="width:120px; height:120px; object-fit:cover; border: 3px solid #0d6efd;" />
+        }
+        else
+        {
+            <div id="profilePreview" class="rounded-circle bg-secondary text-white 
+                        d-flex align-items-center justify-content-center mx-auto"
+                 style="width:120px; height:120px; font-size:40px;">
+                👤
+            </div>
+        }
+
+        <!-- Camera icon overlay -->
+        <div onclick="document.getElementById('profileImageInput').click()"
+             class="position-absolute bottom-0 end-0 bg-primary rounded-circle 
+                    d-flex align-items-center justify-content-center"
+             style="width:35px; height:35px; cursor:pointer;">
+            📷
+        </div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" name="profileImage" id="profileImageInput"
+           accept="image/*" style="display:none;"
+           onchange="previewImage(this)" />
+    <small class="text-muted d-block mt-2">Click camera to change photo</small>
+</div>
+
+                        <!-- Basic Info -->
+                        <h5 class="mb-3">Basic Information</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="Name" value="@Model.Name"
+                                   class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="Email" value="@Model.Email"
+                                   class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <input type="text" value="@Model.Role"
+                                   class="form-control" readonly />
+                        </div>
+
+                        <hr />
+
+                        <!-- Change Password -->
+                        <h5 class="mb-3">Change Password</h5>
+                        <small class="text-muted">Leave blank if you don't want to change</small>
+                        <div class="mb-3 mt-2">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" name="CurrentPassword"
+                                   class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" name="NewPassword"
+                                   class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" name="ConfirmPassword"
+                                   class="form-control" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            💾 Save Changes
+                        </button>
+                    </form>
+
+                    <hr />
+
+                    <!-- Logout -->
+                    <a href="/Profile/Logout" class="btn btn-danger w-100">
+                        🚪 Logout
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    @section Scripts {
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var preview = document.getElementById('profilePreview');
+                    preview.outerHTML = '<img src="' + e.target.result + '" id="profilePreview" ' +
+                        'class="rounded-circle" ' +
+                        'style="width:120px; height:120px; object-fit:cover; border: 3px solid #0d6efd;" />';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
+</div>

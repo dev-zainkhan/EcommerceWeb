@@ -1,0 +1,22 @@
+## .gitignore for ASP.NET Core
+
+# Build results
+bin/
+obj/
+publish/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Secrets (IMPORTANT - never upload these)
+appsettings.Production.json
+
+# NuGet
+packages/
+*.nupkg
+
+# OS
+.DS_Store
+Thumbs.db
