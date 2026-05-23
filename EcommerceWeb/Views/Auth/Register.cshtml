@@ -3,48 +3,242 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    body {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        min-height: 100vh;
+        overflow: hidden;
+    }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-header bg-success text-white text-center">
-                    <h4>Create Account</h4>
-                </div>
-                <div class="card-body">
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="alert alert-danger">@ViewBag.Error</div>
-                    }
-                    <form method="post" action="/Auth/Register">
-                        <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <select name="role" class="form-select">
-                                <option value="Buyer">Buyer</option>
-                                <option value="Seller">Seller</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Register</button>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    Already have an account? <a href="/Auth/Login">Login here</a>
-                </div>
-            </div>
+    .register-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 20px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 500px;
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s ease;
+    }
+
+    .card-header {
+        background: rgba(255,255,255,0.15);
+        border-bottom: none;
+        padding: 25px;
+    }
+
+        .card-header h3 {
+            color: white;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            color: #f1f1f1;
+            margin: 0;
+        }
+
+    .card-body {
+        padding: 35px;
+    }
+
+    .form-label {
+        color: white;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        height: 50px;
+        border-radius: 12px;
+        border: none;
+        padding-left: 15px;
+        background: rgba(255,255,255,0.92);
+        transition: 0.3s;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 12px rgba(255,255,255,0.7);
+        }
+
+    .btn-register {
+        height: 52px;
+        border-radius: 12px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #00b09b, #96c93d);
+        color: white;
+        transition: 0.3s;
+    }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+
+    .card-footer {
+        background: transparent;
+        border-top: none;
+        text-align: center;
+        padding-bottom: 25px;
+        color: white;
+    }
+
+        .card-footer a {
+            color: #d9ff00;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+            .card-footer a:hover {
+                text-decoration: underline;
+            }
+
+    .alert {
+        border-radius: 12px;
+    }
+
+    /* Animated circles */
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.12);
+        animation: float 7s infinite ease-in-out;
+    }
+
+        .circle:nth-child(1) {
+            width: 140px;
+            height: 140px;
+            top: 8%;
+            left: 10%;
+        }
+
+        .circle:nth-child(2) {
+            width: 220px;
+            height: 220px;
+            bottom: 5%;
+            right: 8%;
+            animation-duration: 10s;
+        }
+
+        .circle:nth-child(3) {
+            width: 90px;
+            height: 90px;
+            bottom: 25%;
+            left: 18%;
+            animation-duration: 6s;
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+</style>
+
+<div class="register-container">
+
+    <!-- Animated Background -->
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+
+    <div class="register-card card">
+
+        <div class="card-header text-center">
+            <h3>Create Account</h3>
+            <p>Join us and start your journey</p>
         </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form method="post" action="/Auth/Register">
+
+                <div class="mb-4">
+                    <label class="form-label">Full Name</label>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           placeholder="Enter your full name"
+                           required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Email Address</label>
+                    <input type="email"
+                           name="email"
+                           class="form-control"
+                           placeholder="Enter your email"
+                           required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           placeholder="Create a password"
+                           required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Select Role</label>
+                    <select name="role" class="form-select">
+                        <option value="Buyer">Buyer</option>
+                        <option value="Seller">Seller</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-register w-100">
+                    Register Now
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="card-footer">
+            Already have an account?
+            <a href="/Auth/Login">Login Here</a>
+        </div>
+
     </div>
-    <!-- Naker Background -->
 
 </div>
