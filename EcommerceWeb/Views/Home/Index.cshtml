@@ -1,8 +1,36 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="auth-hero text-center mb-5" style="border-radius:var(--radius-lg);">
+        <span class="badge bg-light text-dark mb-3">🛍️ ShopSphere</span>
+        <h1 class="fw-bold" style="color:#fff;font-size:2.6rem;">A modern marketplace for buyers &amp; sellers</h1>
+        <p class="opacity-75 mx-auto mt-2" style="max-width:620px;">
+            Shop from independent sellers or open your own store in minutes — secure accounts,
+            multi-image listings, real-time stock and a frictionless cash-on-delivery checkout.
+        </p>
+        <div class="d-flex justify-content-center gap-2 mt-4">
+            <a href="/Auth/Register" class="btn btn-light btn-lg fw-semibold">Get started</a>
+            <a href="/Auth/Login" class="btn btn-outline-light btn-lg">Sign in</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">
+            <div style="font-size:1.8rem;">🛒</div>
+            <h5 class="mt-2">Shop with confidence</h5>
+            <p class="text-muted mb-0">Browse products with image galleries, live stock counts and a sticky cart that follows you.</p>
+        </div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">
+            <div style="font-size:1.8rem;">🏪</div>
+            <h5 class="mt-2">Sell in minutes</h5>
+            <p class="text-muted mb-0">List products with multiple images and manage your inventory from a clean seller dashboard.</p>
+        </div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">
+            <div style="font-size:1.8rem;">🔒</div>
+            <h5 class="mt-2">Secure by design</h5>
+            <p class="text-muted mb-0">BCrypt-hashed passwords, session-based auth and ACID order transactions.</p>
+        </div></div></div>
+    </div>
 </div>

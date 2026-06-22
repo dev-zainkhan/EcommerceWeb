@@ -1,4 +1,4 @@
-﻿@using ProductModel = EcommerceWeb.Models.Product.Product
+@using ProductModel = EcommerceWeb.Models.Product.Product
 @using EcommerceWeb.Models.Product
 @model List<ProductModel>
 
@@ -11,8 +11,16 @@
     decimal cartTotal = cartItems?.Sum(x => x.Subtotal) ?? 0;
 }
 
-<div class="container mt-4" style="padding-bottom:100px;">
-    <h2 class="mb-4">🛍️ Shop</h2>
+<div class="container py-4" style="padding-bottom:120px !important;">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+        <div>
+            <h1 class="page-title mb-1">Discover products</h1>
+            <p class="page-sub mb-0">@Model.Count item@(Model.Count == 1 ? "" : "s") available right now</p>
+        </div>
+        <span class="badge bg-primary-subtle text-primary px-3 py-2" style="background:var(--brand-50)!important;color:var(--brand-700)!important;font-size:.85rem;">
+            🚚 Free shipping on every order
+        </span>
+    </div>
 
     @if (TempData["CartSuccess"] != null)
     {
@@ -29,93 +37,96 @@
         </div>
     }
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <div style="font-size:3rem;">🛍️</div>
+            <h4 class="mt-3">No products yet</h4>
+            <p class="text-muted">Check back soon — sellers are adding items.</p>
+        </div>
+    }
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 product-grid">
         @foreach (var product in Model)
         {
             var images = productImages != null && productImages.ContainsKey(product.ProductId)
                 ? productImages[product.ProductId] : null;
 
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    @if (images != null && images.Count > 0)
-                    {
-                        <div id="carousel_@product.ProductId" class="carousel slide"
-                             data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                @for (int i = 0; i < images.Count; i++)
+                <div class="card h-100">
+                    <div class="position-relative">
+                        @if (images != null && images.Count > 0)
+                        {
+                            <div id="carousel_@product.ProductId" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @for (int i = 0; i < images.Count; i++)
+                                    {
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <img src="@images[i].ImagePath" class="d-block w-100"
+                                                 style="height:230px; object-fit:cover;" alt="@product.Name" />
+                                        </div>
+                                    }
+                                </div>
+                                @if (images.Count > 1)
                                 {
-                                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                                        <img src="@images[i].ImagePath"
-                                             class="d-block w-100"
-                                             style="height:200px; object-fit:cover;" />
-                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carousel_@product.ProductId" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carousel_@product.ProductId" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </button>
                                 }
                             </div>
-                            @if (images.Count > 1)
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center text-muted"
+                                 style="height:230px; background:#eef1f6;">
+                                <span>No Image</span>
+                            </div>
+                        }
+                        @if (product.Stock > 0)
+                        {
+                            <span class="badge position-absolute top-0 start-0 m-2"
+                                  style="background:rgba(16,185,129,.95);">In stock</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger position-absolute top-0 start-0 m-2">Sold out</span>
+                        }
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-1">@product.Name</h5>
+                        <p class="card-text text-muted small flex-grow-1">
+                            @(string.IsNullOrWhiteSpace(product.Description)
+                                ? "" : (product.Description.Length > 80 ? product.Description.Substring(0, 80) + "…" : product.Description))
+                        </p>
+                        <div class="d-flex align-items-baseline justify-content-between mt-2">
+                            <strong class="text-success" style="font-size:1.35rem;">Rs. @product.Price.ToString("N0")</strong>
+                            @if (product.Stock > 0)
                             {
-                                <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carousel_@product.ProductId"
-                                        data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carousel_@product.ProductId"
-                                        data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                </button>
+                                <small class="text-muted">@product.Stock left</small>
                             }
                         </div>
-                    }
-                    else
-                    {
-                        <div class="bg-secondary text-white d-flex align-items-center
-                                    justify-content-center" style="height:200px;">
-                            <span>No Image</span>
-                        </div>
-                    }
-
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text text-muted small">@product.Description</p>
-                        <p class="card-text">
-                            <strong class="text-success fs-5">
-                                Rs. @product.Price.ToString("N0")
-                            </strong>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                @if (product.Stock > 0)
-                                {
-                                    <span class="text-success">✅ In Stock (@product.Stock)</span>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">❌ Out of Stock</span>
-                                }
-                            </small>
-                        </p>
                     </div>
                     <div class="card-footer">
                         @if (product.Stock > 0)
                         {
                             <form method="post" action="/Cart/Add">
-                                <input type="hidden" name="productId"
-                                       value="@product.ProductId" />
+                                <input type="hidden" name="productId" value="@product.ProductId" />
                                 <div class="d-flex align-items-center gap-2">
-                                    <input type="number" name="quantity" value="1"
-                                           min="1" max="@product.Stock"
-                                           class="form-control w-50" />
-                                    <button type="submit" class="btn btn-primary w-50">
-                                        🛒 Add to Cart
-                                    </button>
+                                    <input type="number" name="quantity" value="1" min="1" max="@product.Stock"
+                                           class="form-control" style="max-width:80px;" />
+                                    <button type="submit" class="btn btn-primary flex-grow-1">🛒 Add to Cart</button>
                                 </div>
                             </form>
                         }
                         else
                         {
-                            <button class="btn btn-secondary w-100" disabled>
-                                Out of Stock
-                            </button>
+                            <button class="btn btn-secondary w-100" disabled>Out of Stock</button>
                         }
                     </div>
                 </div>
@@ -127,54 +138,40 @@
 <!-- Sticky Bottom Cart Bar -->
 @if (cartCount > 0)
 {
-    <div class="fixed-bottom bg-dark text-white py-3 px-4 shadow-lg"
-         style="z-index:1050;">
-        <div class="container d-flex justify-content-between align-items-center">
+    <div class="fixed-bottom cart-bar text-white py-3 px-3" style="z-index:1050;">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div class="d-flex align-items-center gap-3">
-                <span class="badge bg-primary fs-6">🛒 @cartCount items</span>
+                <span class="badge bg-primary fs-6">🛒 @cartCount item@(cartCount == 1 ? "" : "s")</span>
                 <div class="d-flex gap-2">
                     @if (cartItems != null)
                     {
                         @foreach (var item in cartItems.Take(3))
-{
-    <div class="text-center position-relative" style="width:55px;">
-        @if (!string.IsNullOrEmpty(item.ImagePath))
-        {
-            <img src="@item.ImagePath"
-                 style="width:40px; height:40px; object-fit:cover; border-radius:8px;" />
-        }
-        <div style="font-size:10px;">
-            @item.ProductName.Substring(0, Math.Min(6, item.ProductName.Length))...
-        </div>
-        <!-- Remove button -->
-      <form method="post" action="/Cart/Remove" style="display:inline;">
-    <input type="hidden" name="cartId" value="@item.CartId" />
-    <input type="hidden" name="returnUrl" value="shop" />
-    <button type="submit"
-            class="position-absolute top-0 end-0 btn btn-danger rounded-circle p-0"
-            style="width:18px; height:18px; font-size:10px; line-height:1;">
-        ✕
-    </button>
-</form>
-    </div>
-}
+                        {
+                            <div class="text-center position-relative" style="width:52px;">
+                                @if (!string.IsNullOrEmpty(item.ImagePath))
+                                {
+                                    <img src="@item.ImagePath" style="width:42px; height:42px; object-fit:cover; border-radius:10px;" />
+                                }
+                                <form method="post" action="/Cart/Remove" style="display:inline;">
+                                    <input type="hidden" name="cartId" value="@item.CartId" />
+                                    <input type="hidden" name="returnUrl" value="shop" />
+                                    <button type="submit"
+                                            class="position-absolute top-0 end-0 btn btn-danger rounded-circle p-0"
+                                            style="width:18px; height:18px; font-size:10px; line-height:1;">✕</button>
+                                </form>
+                            </div>
+                        }
                         @if (cartItems.Count > 3)
                         {
-                            <div class="text-center d-flex align-items-center">
-                                <span class="text-muted">+@(cartItems.Count - 3) more</span>
-                            </div>
+                            <div class="d-flex align-items-center"><span class="text-white-50 small">+@(cartItems.Count - 3) more</span></div>
                         }
                     }
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <strong class="fs-5">Rs. @cartTotal.ToString("N0")</strong>
-                <a href="/Order/Checkout" class="btn btn-success btn-lg">
-                    Checkout →
-                </a>
-                <a href="/Cart/Index" class="btn btn-outline-light">
-                    View Cart
-                </a>
+                <a href="/Cart/Index" class="btn btn-outline-light">View Cart</a>
+                <a href="/Order/Checkout" class="btn btn-success btn-lg">Checkout →</a>
             </div>
         </div>
     </div>

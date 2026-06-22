@@ -1,14 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace EcommerceWeb.DAL
 {
     public class DbHelper
     {
-        private readonly string _connectionString =
-            "Server=test.cgdk2ewisgbk.us-east-1.rds.amazonaws.com,1433;" +
-            "Database=web_database;User Id=admin;Password=zainchuttikr;" +
-            "TrustServerCertificate=True;";
+        // Set once at startup from configuration (see Program.cs).
+        // Never hard-code connection strings or credentials in source.
+        public static string ConnectionString { get; set; } = string.Empty;
 
-        public SqlConnection GetConnection() => new SqlConnection(_connectionString);
+        public SqlConnection GetConnection() => new SqlConnection(ConnectionString);
     }
 }

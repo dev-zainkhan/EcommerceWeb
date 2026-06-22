@@ -8,10 +8,17 @@ namespace EcommerceWeb.DAL
 {
     public class S3Helper
     {
-        private readonly string _accessKey = "AKIAT7LXM4KWF425Y2MN";
-        private readonly string _secretKey = "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";
-        private readonly string _bucketName = "website-project11111";
-        private readonly RegionEndpoint _region = RegionEndpoint.USEast1;
+        // Set once at startup from configuration (see Program.cs).
+        // Never hard-code credentials in source.
+        public static string AccessKey { get; set; } = string.Empty;
+        public static string SecretKey { get; set; } = string.Empty;
+        public static string BucketName { get; set; } = string.Empty;
+        public static string Region { get; set; } = "us-east-1";
+
+        private string _accessKey => AccessKey;
+        private string _secretKey => SecretKey;
+        private string _bucketName => BucketName;
+        private RegionEndpoint _region => RegionEndpoint.GetBySystemName(Region);
 
         public string UploadImage(IFormFile file)
         {

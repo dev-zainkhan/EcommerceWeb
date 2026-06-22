@@ -1,17 +1,29 @@
-﻿@{
+@{
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container py-5">
+    <div class="row justify-content-center align-items-stretch g-4">
+        <!-- Brand panel -->
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="auth-hero">
+                <span class="badge bg-light text-dark mb-3">🛍️ ShopSphere</span>
+                <h2 class="fw-bold">Join the marketplace.</h2>
+                <p class="opacity-75 mt-2">Create an account in seconds. Shop as a <strong>Buyer</strong> or open your own store as a <strong>Seller</strong>.</p>
+                <div class="feat"><span>🛒</span><span>Browse &amp; buy from sellers everywhere</span></div>
+                <div class="feat"><span>🏪</span><span>List products with up to multiple images</span></div>
+                <div class="feat"><span>📈</span><span>Manage stock from a seller dashboard</span></div>
+            </div>
+        </div>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-header bg-success text-white text-center">
-                    <h4>Create Account</h4>
-                </div>
-                <div class="card-body">
+        <!-- Form -->
+        <div class="col-lg-5 col-md-7">
+            <div class="card shadow h-100">
+                <div class="card-body p-4 p-md-5">
+                    <h3 class="fw-bold mb-1">Create your account</h3>
+                    <p class="text-muted mb-4">It only takes a moment.</p>
+
                     @if (ViewBag.Error != null)
                     {
                         <div class="alert alert-danger">@ViewBag.Error</div>
@@ -19,32 +31,30 @@
                     <form method="post" action="/Auth/Register">
                         <div class="mb-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control" required />
+                            <input type="text" name="name" class="form-control" placeholder="Jane Doe" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" required />
+                            <input type="email" name="email" class="form-control" placeholder="you@example.com" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required />
+                            <input type="password" name="password" class="form-control" placeholder="Choose a strong password" required />
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
+                        <div class="mb-4">
+                            <label class="form-label">I want to join as</label>
                             <select name="role" class="form-select">
-                                <option value="Buyer">Buyer</option>
-                                <option value="Seller">Seller</option>
+                                <option value="Buyer">🛒 Buyer — shop products</option>
+                                <option value="Seller">🏪 Seller — sell products</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Register</button>
+                        <button type="submit" class="btn btn-success w-100 btn-lg">Create account</button>
                     </form>
-                </div>
-                <div class="card-footer text-center">
-                    Already have an account? <a href="/Auth/Login">Login here</a>
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Already have an account? <a href="/Auth/Login" class="fw-semibold">Sign in</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Naker Background -->
-
 </div>
